@@ -1,3 +1,4 @@
+using Bill.Application.Features.Clients.Queries.GetClients;
 using Bill.Domain.Clients;
 using Bill.Domain.Repositories;
 using Bill.Infrastructure.Configurations;
@@ -12,19 +13,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<ClientConfiguration>(
     options =>
     {
-        options.ConnectionString = builder.Configuration.GetSection("MongoDB:ConnectionString").Value;
-        options.Database = builder.Configuration.GetSection("MongoDB:Database").Value;
+        options.ConnectionString = builder.Configuration.GetSection("MongoDB:ConnectionString")?.Value ?? "";
+        options.Database = builder.Configuration.GetSection("MongoDB:Database")?.Value ?? "";
     }
 );
 
 // Add services to the container.
-//builder.Services.AddMediatR(typeof(Program));
-builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<IClientContext, ClientContext>();
-builder.Services.AddScoped<IBillUnitOfWork, BillUnitOfWork>();
 builder.Services.AddScoped<IClientReadOnlyRepository, ClientReadOnlyRepository>();
 builder.Services.AddScoped<IClientCommandRepository, ClientCommandRepository>();
+builder.Services.AddScoped<IBillUnitOfWork, BillUnitOfWork>();
 
+// add mediators querries/commands
+builder.Services.AddMediatR(typeof(GetClientsQuery));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
