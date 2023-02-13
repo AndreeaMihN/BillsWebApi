@@ -18,6 +18,6 @@ namespace Bill.Infrastructure.Contexts
             var client = new MongoClient(options.Value.ConnectionString);
             db = client.GetDatabase(options.Value.Database);
         }
-        public IMongoCollection<Client> Clients => db.GetCollection<Client>("Clients");
+        public IMongoCollection<Client> Clients => db.GetCollection<Client>("Client");
     }
 }
