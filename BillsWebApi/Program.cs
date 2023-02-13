@@ -1,3 +1,4 @@
+using Bill.Application.Features.Clients.Commands.CreateClient;
 using Bill.Application.Features.Clients.Queries.GetClients;
 using Bill.Domain.Clients;
 using Bill.Domain.Repositories;
@@ -6,6 +7,8 @@ using Bill.Infrastructure.Contexts;
 using Bill.Infrastructure.Domain.Clients;
 using Bill.Infrastructure.Repositories;
 using MediatR;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +29,13 @@ builder.Services.AddScoped<IBillUnitOfWork, BillUnitOfWork>();
 
 // add mediators querries/commands
 builder.Services.AddMediatR(typeof(GetClientsQuery));
+builder.Services.AddMediatR(typeof(CreateClientCommand));
+
+//Auto Mapper
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddMaps(AppDomain.CurrentDomain.GetAssemblies());
+});
 
 builder.Services.AddCors(options =>
 {
@@ -41,7 +51,21 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Bills Management API",
+        Description = "Bills Management API"
+    });
+    options.ExampleFilters();
+    options.EnableAnnotations();
+    options.IgnoreObsoleteActions();
+    options.CustomSchemaIds(x => x.FullName);
+});
+
+builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 
 var app = builder.Build();
 

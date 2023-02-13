@@ -12,11 +12,18 @@ namespace Bill.Infrastructure.Domain.Clients
             _context = context;
         }
 
-        //public async Task CreateAsync(Client client)
-        //{
-        //    if (client == null) throw new ArgumentNullException("client");
-        //    await _context.Clients.InsertOneAsync(client);
-        //}
+        public async Task CreateAsync(Client client)
+        {
+            try
+            {
+                if (client == null) throw new ArgumentNullException("client");
+                await _context.Clients.InsertOneAsync(client);
+            }
+            catch (Exception ex)
+            {
+                var exception = ex;
+            }
+        }
 
         //public async Task RemoveAsync(string id)
         //{
