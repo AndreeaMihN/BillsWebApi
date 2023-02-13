@@ -1,4 +1,5 @@
-﻿using Bill.Application.Features.Clients.Queries.GetClients;
+﻿using Bill.Application.Features.Clients.Commands.CreateClient;
+using Bill.Application.Features.Clients.Queries.GetClients;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,14 @@ namespace BillsWebApi.Controllers
         {
             var clients = await _mediator.Send(new GetClientsQuery());
             return Ok(clients);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateClient([FromBody] CreateClientDto createClientDto)
+        {
+            var result = await _mediator.Send(new CreateClientCommand(createClientDto));
+
+            return Ok(result);
         }
     }
 }

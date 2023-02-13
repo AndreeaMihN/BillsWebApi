@@ -2,7 +2,7 @@
 {
     public interface IClientCommandRepository
     {
-        //Task CreateAsync(Client client);
+        Task CreateAsync(Client client);
 
         //Task UpdateAsync(Client client);
 
