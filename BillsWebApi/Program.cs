@@ -27,6 +27,17 @@ builder.Services.AddScoped<IBillUnitOfWork, BillUnitOfWork>();
 // add mediators querries/commands
 builder.Services.AddMediatR(typeof(GetClientsQuery));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllOrigins", builder =>
+    {
+        builder
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -42,6 +53,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllOrigins");
 
 app.UseAuthorization();
 
