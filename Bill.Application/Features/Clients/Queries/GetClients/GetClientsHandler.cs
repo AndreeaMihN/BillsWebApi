@@ -1,10 +1,10 @@
-﻿using Bill.Domain.Clients;
+﻿using Bill.Domain.Clients.Responses;
 using Bill.Domain.Repositories;
 using MediatR;
 
 namespace Bill.Application.Features.Clients.Queries.GetClients
 {
-    public class GetClientsHandler : IRequestHandler<GetClientsQuery, IEnumerable<Client>>
+    public class GetClientsHandler : IRequestHandler<GetClientsQuery, SearchClientResponse>
     {
         private readonly IBillUnitOfWork _billUnitOfWork;
         //private readonly IMapper _mapper;
@@ -15,7 +15,7 @@ namespace Bill.Application.Features.Clients.Queries.GetClients
             //_mapper = mapper;
         }
 
-        public async Task<IEnumerable<Client>> Handle(GetClientsQuery request,
+        public async Task<SearchClientResponse> Handle(GetClientsQuery request,
             CancellationToken cancellationToken) => await _billUnitOfWork.ClientReadOnlyRepository.GetAllClients();
     }
 }

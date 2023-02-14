@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using Bill.Domain.Clients;
+using Bill.Domain.Clients.Responses;
 using Bill.Domain.Repositories;
 using MediatR;
 
 namespace Bill.Application.Features.Clients.Commands.CreateClient
 {
-    public class CreateClientHandler : IRequestHandler<CreateClientCommand, bool>
+    public class CreateClientHandler : IRequestHandler<CreateClientCommand, ClientResponse>
     {
         private readonly IBillUnitOfWork _billUnitOfWork;
         private readonly IMapper _mapper;
@@ -16,21 +17,12 @@ namespace Bill.Application.Features.Clients.Commands.CreateClient
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(CreateClientCommand request, CancellationToken cancellationToken)
+        public async Task<ClientResponse> Handle(CreateClientCommand command, CancellationToken cancellationToken)
         {
-            Client entity = _mapper.Map<Client>(request.createClientDto);
+            Client entity = _mapper.Map<Client>(command.clientRequest);
             entity.IsActive = false;
 
-            try
-            {
-                await _billUnitOfWork.ClientCommandRepository.CreateAsync(entity);
-            }
-            catch
-            {
-                //throw new Exceptions.ApplicationException("Failed to add a new client");
-            }
-
-            return true;
+            return await _billUnitOfWork.ClientCommandRepository.CreateAsync(entity);
         }
     }
 }

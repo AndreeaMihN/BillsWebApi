@@ -1,11 +1,12 @@
-﻿namespace Bill.Domain.Clients
+﻿using Bill.Domain.Clients.Responses;
+
+namespace Bill.Domain.Clients;
+
+public interface IClientCommandRepository
 {
-    public interface IClientCommandRepository
-    {
-        Task CreateAsync(Client client);
+    public Task<ClientResponse> CreateAsync(Client client);
 
-        //Task UpdateAsync(Client client);
+    //Task UpdateAsync(Client client);
 
-        //Task RemoveAsync(string id);
-    }
+    //Task RemoveAsync(string id);
 }

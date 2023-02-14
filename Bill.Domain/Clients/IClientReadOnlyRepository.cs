@@ -1,8 +1,10 @@
-﻿namespace Bill.Domain.Clients
+﻿using Bill.Domain.Clients.Responses;
+
+namespace Bill.Domain.Clients
 {
     public interface IClientReadOnlyRepository
     {
-        Task<List<Client>> GetAllClients();
+        public Task<SearchClientResponse> GetAllClients();
 
         //Task<Client> GetClientById(string id);
     }

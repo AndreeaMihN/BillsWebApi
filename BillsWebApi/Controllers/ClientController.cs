@@ -1,7 +1,11 @@
 ﻿using Bill.Application.Features.Clients.Commands.CreateClient;
 using Bill.Application.Features.Clients.Queries.GetClients;
+using Bill.Domain.Clients.Requests;
+using Bill.Domain.Clients.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 
 namespace BillsWebApi.Controllers
 {
@@ -9,23 +13,42 @@ namespace BillsWebApi.Controllers
     [ApiController]
     public class ClientController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IMediator mediator;
+        private readonly ILogger<ClientController> logger;
 
-        public ClientController(IMediator mediator) => _mediator = mediator;
+        public ClientController(IMediator mediator, ILogger<ClientController> logger)
+        {
+            this.mediator = mediator;
+            this.logger = logger;
+        }
 
         [HttpGet]
-        public async Task<ActionResult> GetClients()
+        [SwaggerOperation(Summary = "Get all clients.")]
+        [ProducesResponseType(typeof(SearchClientResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Search()
         {
-            var clients = await _mediator.Send(new GetClientsQuery());
-            return Ok(clients);
+            logger.LogInformation("Search clients operation started");
+
+            var searchClientResponse = await mediator.Send(new GetClientsQuery());
+
+            logger.LogInformation("Search clients operation finished successfully with result {@searchClientResponse}.", searchClientResponse);
+
+            return Ok(searchClientResponse);
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateClient([FromBody] CreateClientDto createClientDto)
+        [ProducesResponseType(typeof(ClientResponse), StatusCodes.Status201Created)]
+        public async Task<ActionResult> Create([FromBody] ClientRequest clientRequest)
         {
-            var result = await _mediator.Send(new CreateClientCommand(createClientDto));
+            logger.LogInformation("Create client request is received: {@createClientRequest}", clientRequest);
 
-            return Ok(result);
+            var clientResponse = await mediator.Send(new CreateClientCommand(clientRequest));
+
+            logger.LogInformation("A new client {@createdClient} is created, {@clientnId}",
+            clientResponse.Client, clientResponse.Client.Id);
+
+            return Ok(clientResponse);
         }
     }
 }

@@ -1,13 +1,13 @@
-﻿using Swashbuckle.AspNetCore.Filters;
-using Bill.Application.Features.Clients.Commands.CreateClient;
+﻿using Bill.Domain.Clients.Requests;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace Management.Api.SwaggerExamples;
 
-public class CreateClientDtoExample : IExamplesProvider<CreateClientDto>
+public class CreateClientDtoExample : IExamplesProvider<ClientRequest>
 {
-    public CreateClientDto GetExamples()
+    public ClientRequest GetExamples()
     {
-        return new CreateClientDto
+        return new ClientRequest
         {
             FirstName = "FirstName",
             LastName = "LastName",
