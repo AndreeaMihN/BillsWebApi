@@ -3,7 +3,7 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace Management.Api.SwaggerExamples;
 
-public class CreateClientDtoExample : IExamplesProvider<ClientRequest>
+public class ClientRequestExample : IExamplesProvider<ClientRequest>
 {
     public ClientRequest GetExamples()
     {
