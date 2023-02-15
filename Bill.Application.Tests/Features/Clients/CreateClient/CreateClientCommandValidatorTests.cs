@@ -45,7 +45,7 @@ namespace Bill.Application.Tests.Features.Clients.CreateClient
         }
 
         [Fact]
-        public void CreateClientValidator_InvalidEmailClient_ReturnSuccess()
+        public void CreateClientValidator_InvalidEmailClient_ReturnBadRequest()
         {
             var validClient = new CreateClientDto()
             {

@@ -40,7 +40,7 @@ namespace Bill.Application.Tests.Features.Clients.CreateClient
 
             // Assert
             mockMapper.Verify(mapper => mapper.Map<Client>(It.Is<CreateClientDto>(x => x.Email == command.createClientDto.Email)), Times.Once);
-            mockBillUnitOfWork.Verify(billUnitOfWork => billUnitOfWork.ClientCommandRepository.CreateAsync(It.Is<Client>(x => x.Id == entityClient.Id)), Times.Once);
+            mockBillUnitOfWork.Verify(billUnitOfWork => billUnitOfWork.ClientCommandRepository.CreateAsync(It.Is<Client>(x => x.AssertThatClientIsSameAs(entityClient))), Times.Once);
 
             Assert.True(result);
         }
@@ -55,7 +55,7 @@ namespace Bill.Application.Tests.Features.Clients.CreateClient
             // Act & Assert
             await Assert.ThrowsAsync<Exception>(async () => await createClientHandler.Handle(command, It.IsAny<CancellationToken>()));
 
-            mockMapper.Verify(mapper => mapper.Map<Client>(It.Is<CreateClientDto>(x => x.Email == command.createClientDto.Email)), Times.Once);
+            mockMapper.Verify(mapper => mapper.Map<Client>(It.Is<CreateClientDto>(x => x.AssertThatClientIsSameAs(command.createClientDto))), Times.Once);
         }
     }
 }

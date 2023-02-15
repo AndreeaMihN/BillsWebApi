@@ -8,6 +8,7 @@ namespace Bill.Application.Features.Clients.Commands.CreateClient
         public CreateClientCommandValidator()
         {
             RuleFor(model => model.FirstName)
+                .Cascade(CascadeMode.Stop)
                 .NotNull().WithMessage("Please ensure you have entered 'FirstName' field")
                 .NotEmpty().WithMessage("Content field shouldn't be empty")
                 .MaximumLength(255);
@@ -18,15 +19,17 @@ namespace Bill.Application.Features.Clients.Commands.CreateClient
                 .NotEmpty().WithMessage("Content field shouldn't be empty");
 
             RuleFor(request => request.Email)
-            .NotEmpty()
-            .Matches(Constants.EmailRegexValidation)
-            .MaximumLength(255)
-            .When(request => request.Email is not null);
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty()
+                .Matches(Constants.EmailRegexValidation)
+                .MaximumLength(255)
+                .When(request => request.Email is not null);
 
             RuleFor(model => model.PersonalIdentificationNumber)
                 .Cascade(CascadeMode.Stop)
                 .NotNull().WithMessage("Please ensure you have entered 'PersonalIdentificationNumber' field")
-                .NotEmpty().WithMessage("Content field shouldn't be empty");
+                .NotEmpty().WithMessage("Content field shouldn't be empty")
+                .MaximumLength(255);
         }
     }
 }
