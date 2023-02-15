@@ -14,14 +14,15 @@ namespace Bill.Infrastructure.Domain.Clients
 
         public async Task CreateAsync(Client client)
         {
+            if (client == null) throw new ArgumentNullException("client");
+
             try
             {
-                if (client == null) throw new ArgumentNullException("client");
                 await _context.Clients.InsertOneAsync(client);
             }
             catch (Exception ex)
             {
-                var exception = ex;
+                throw new Exception("Failed to insert in DB a new client {@ex}", ex);
             }
         }
 

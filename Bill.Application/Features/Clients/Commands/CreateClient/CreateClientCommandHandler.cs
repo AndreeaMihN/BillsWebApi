@@ -16,9 +16,9 @@ namespace Bill.Application.Features.Clients.Commands.CreateClient
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(CreateClientCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CreateClientCommand command, CancellationToken cancellationToken)
         {
-            Client entity = _mapper.Map<Client>(request.createClientDto);
+            Client entity = _mapper.Map<Client>(command.createClientDto);
             entity.IsActive = false;
 
             try
@@ -27,7 +27,7 @@ namespace Bill.Application.Features.Clients.Commands.CreateClient
             }
             catch
             {
-                //throw new Exceptions.ApplicationException("Failed to add a new client");
+                throw new Exception("Failed to add a new client");
             }
 
             return true;
