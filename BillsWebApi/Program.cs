@@ -6,9 +6,14 @@ using Bill.Infrastructure.Configurations;
 using Bill.Infrastructure.Contexts;
 using Bill.Infrastructure.Domain.Clients;
 using Bill.Infrastructure.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +35,9 @@ builder.Services.AddScoped<IBillUnitOfWork, BillUnitOfWork>();
 // add mediators querries/commands
 builder.Services.AddMediatR(typeof(GetClientsQuery));
 builder.Services.AddMediatR(typeof(CreateClientCommand));
+builder.Services.AddMediatR(typeof(CreateClientHandler));
+builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
+
 
 //Auto Mapper
 builder.Services.AddAutoMapper(cfg =>
@@ -66,6 +74,14 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
+
+// validators
+builder.Services.AddValidatorsFromAssemblyContaining<CreateClientCommand>(); // register validators
+
+builder.Services
+            .AddFluentValidationAutoValidation()
+            .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
 
 var app = builder.Build();
 

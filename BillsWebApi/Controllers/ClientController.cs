@@ -14,14 +14,14 @@ namespace BillsWebApi.Controllers
         public ClientController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet]
-        public async Task<ActionResult> GetClients()
+        public async Task<ActionResult> GetClientsAsync()
         {
             var clients = await _mediator.Send(new GetClientsQuery());
             return Ok(clients);
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateClient([FromBody] CreateClientDto createClientDto)
+        public async Task<ActionResult> CreateClientAsync([FromBody] CreateClientDto createClientDto)
         {
             var result = await _mediator.Send(new CreateClientCommand(createClientDto));
 
