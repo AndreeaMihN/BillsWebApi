@@ -36,6 +36,7 @@ builder.Services.AddMediatR(typeof(CreateClientCommand));
 builder.Services.AddMediatR(typeof(CreateClientHandler));
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
+
 //Auto Mapper
 builder.Services.AddAutoMapper(cfg =>
 {
@@ -84,7 +85,6 @@ builder.Services.AddLogging(loggingBuilder =>
 {
     loggingBuilder.AddSeq();
 });
-
 
 var app = builder.Build();
 

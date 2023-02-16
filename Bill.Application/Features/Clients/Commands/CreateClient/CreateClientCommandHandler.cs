@@ -25,7 +25,7 @@ namespace Bill.Application.Features.Clients.Commands.CreateClient
 
             try
             {
-                await _billUnitOfWork.ClientCommandRepository.CreateAsync(entity);
+                await _billUnitOfWork.ClientCommandRepository.CreateAsync(null);
             }
             catch (Exception ex)
             {
