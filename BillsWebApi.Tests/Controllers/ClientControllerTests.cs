@@ -3,6 +3,7 @@ using Bill.Application.Features.Clients.Commands.CreateClient;
 using BillsWebApi.Controllers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -11,13 +12,14 @@ namespace BillsWebApi.Tests.Controllers
     public class ClientControllerTests
     {
         private readonly ClientController controller;
+        private readonly ILogger<ClientController> logger;
         private readonly Mock<IMediator> mockMediator;
         private readonly Fixture fixture;
 
         public ClientControllerTests()
         {
             mockMediator = new Mock<IMediator>();
-            controller = new ClientController(mockMediator.Object);
+            controller = new ClientController(mockMediator.Object, logger);
             fixture = new Fixture();
         }
 
