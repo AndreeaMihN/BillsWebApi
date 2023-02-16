@@ -1,3 +1,18 @@
+using Bill.Application.Features.Clients.Commands.CreateClient;
+using Bill.Application.Features.Clients.Queries.GetClients;
+using Bill.Domain.Clients;
+using Bill.Domain.Repositories;
+using Bill.Infrastructure.Configurations;
+using Bill.Infrastructure.Contexts;
+using Bill.Infrastructure.Domain.Clients;
+using Bill.Infrastructure.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using MediatR;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
+using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 //DB Config

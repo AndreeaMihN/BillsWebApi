@@ -1,6 +1,7 @@
 ﻿using Bill.Domain.Clients;
 using Bill.Domain.Repositories;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Bill.Application.Features.Clients.Queries.GetClients
 {
@@ -8,6 +9,7 @@ namespace Bill.Application.Features.Clients.Queries.GetClients
     {
         private readonly IBillUnitOfWork _billUnitOfWork;
         //private readonly IMapper _mapper;
+        private readonly ILogger<GetClientsHandler> _logger;
 
         public GetClientsHandler(IBillUnitOfWork billUnitOfWork)
         {
@@ -23,8 +25,9 @@ namespace Bill.Application.Features.Clients.Queries.GetClients
             {
                 clients = await _billUnitOfWork.ClientReadOnlyRepository.GetAllClients();
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError("Get clients failed, {@exception}", ex);
                 throw new Exception("Failed to get list with all clients");
             }
 
