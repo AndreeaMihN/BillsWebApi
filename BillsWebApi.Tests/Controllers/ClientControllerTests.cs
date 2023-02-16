@@ -1,17 +1,9 @@
-using AutoFixture;
-using Bill.Application.Features.Clients.Commands.CreateClient;
-using BillsWebApi.Controllers;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Moq;
-using Xunit;
-
 namespace BillsWebApi.Tests.Controllers
 {
     public class ClientControllerTests
     {
         private readonly ClientController controller;
+        private readonly ILogger<ClientController> logger;
         private readonly Mock<IMediator> mockMediator;
         private readonly Mock<ILogger<ClientController>> mockLogger;
         private readonly Fixture fixture;

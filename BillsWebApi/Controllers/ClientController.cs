@@ -1,9 +1,4 @@
-﻿using Bill.Application.Features.Clients.Commands.CreateClient;
-using Bill.Application.Features.Clients.Queries.GetClients;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-
-namespace BillsWebApi.Controllers
+﻿namespace BillsWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
