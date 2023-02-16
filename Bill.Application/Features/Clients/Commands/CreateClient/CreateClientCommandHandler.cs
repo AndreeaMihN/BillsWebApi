@@ -12,10 +12,11 @@ namespace Bill.Application.Features.Clients.Commands.CreateClient
         private readonly IMapper _mapper;
         private readonly ILogger<CreateClientHandler> _logger;
 
-        public CreateClientHandler(IBillUnitOfWork billUnitOfWork, IMapper mapper)
+        public CreateClientHandler(IBillUnitOfWork billUnitOfWork, IMapper mapper, ILogger<CreateClientHandler> logger)
         {
             _billUnitOfWork = billUnitOfWork;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<bool> Handle(CreateClientCommand command, CancellationToken cancellationToken)

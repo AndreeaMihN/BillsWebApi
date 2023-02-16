@@ -20,6 +20,7 @@ namespace BillsWebApi.Tests.Controllers
         public ClientControllerTests()
         {
             mockMediator = new Mock<IMediator>();
+            mockLogger = new Mock<ILogger<ClientController>>();
             controller = new ClientController(mockMediator.Object, mockLogger.Object);
             fixture = new Fixture();
         }

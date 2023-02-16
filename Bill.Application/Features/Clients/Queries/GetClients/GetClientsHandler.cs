@@ -8,13 +8,12 @@ namespace Bill.Application.Features.Clients.Queries.GetClients
     public class GetClientsHandler : IRequestHandler<GetClientsQuery, List<Client>>
     {
         private readonly IBillUnitOfWork _billUnitOfWork;
-        //private readonly IMapper _mapper;
         private readonly ILogger<GetClientsHandler> _logger;
 
-        public GetClientsHandler(IBillUnitOfWork billUnitOfWork)
+        public GetClientsHandler(IBillUnitOfWork billUnitOfWork, ILogger<GetClientsHandler> logger)
         {
             _billUnitOfWork = billUnitOfWork;
-            //_mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<List<Client>> Handle(GetClientsQuery request,

@@ -12,7 +12,6 @@ using MediatR;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
-
 var builder = WebApplication.CreateBuilder(args);
 
 //DB Config

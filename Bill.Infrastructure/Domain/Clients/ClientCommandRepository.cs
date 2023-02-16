@@ -9,9 +9,10 @@ namespace Bill.Infrastructure.Domain.Clients
         private readonly IClientContext _context;
         private readonly ILogger<ClientCommandRepository> _logger;
 
-        public ClientCommandRepository(IClientContext context)
+        public ClientCommandRepository(IClientContext context, ILogger<ClientCommandRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task CreateAsync(Client client)

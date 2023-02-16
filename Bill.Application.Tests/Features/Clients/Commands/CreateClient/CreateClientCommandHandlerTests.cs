@@ -3,6 +3,7 @@ using AutoMapper;
 using Bill.Application.Features.Clients.Commands.CreateClient;
 using Bill.Domain.Clients;
 using Bill.Domain.Repositories;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -13,6 +14,7 @@ namespace Bill.Application.Tests.Features.Clients.Commands.CreateClient
         private readonly CreateClientHandler createClientHandler;
         private readonly Mock<IBillUnitOfWork> mockBillUnitOfWork;
         private readonly Mock<IMapper> mockMapper;
+        private readonly Mock<ILogger<CreateClientHandler>> mockLogger;
         private readonly Fixture fixture;
         private readonly CreateClientCommand command;
         private readonly Client entityClient;
@@ -20,8 +22,9 @@ namespace Bill.Application.Tests.Features.Clients.Commands.CreateClient
         public CreateClientCommandHandlerTests()
         {
             mockMapper = new Mock<IMapper>();
+            mockLogger = new Mock<ILogger<CreateClientHandler>>();
             mockBillUnitOfWork = new Mock<IBillUnitOfWork>();
-            createClientHandler = new CreateClientHandler(mockBillUnitOfWork.Object, mockMapper.Object);
+            createClientHandler = new CreateClientHandler(mockBillUnitOfWork.Object, mockMapper.Object, mockLogger.Object);
 
             fixture = new Fixture();
             command = fixture.Create<CreateClientCommand>();
