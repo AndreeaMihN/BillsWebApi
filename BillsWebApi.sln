@@ -11,11 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bill.Domain", "Bill.Domain\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bill.Infrastructure", "Bill.Infrastructure\Bill.Infrastructure.csproj", "{F6B075BC-B8EE-468A-8038-39EEF8833AA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BillsWebApi.Tests", "BillsWebApi.Tests\BillsWebApi.Tests.csproj", "{A11793EC-F02E-4854-9B37-F67382825677}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BillsWebApi.Tests", "BillsWebApi.Tests\BillsWebApi.Tests.csproj", "{A11793EC-F02E-4854-9B37-F67382825677}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bill.Application.Tests", "Bill.Application.Tests\Bill.Application.Tests.csproj", "{FE335CCB-BA28-4312-A3DC-42519D254799}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bill.Application.Tests", "Bill.Application.Tests\Bill.Application.Tests.csproj", "{FE335CCB-BA28-4312-A3DC-42519D254799}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bill.Infrastructure.Tests", "Bill.Infrastructure.Tests\Bill.Infrastructure.Tests.csproj", "{8B02597E-E5EA-4253-B451-762F91C23636}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bill.Infrastructure.Tests", "Bill.Infrastructure.Tests\Bill.Infrastructure.Tests.csproj", "{8B02597E-E5EA-4253-B451-762F91C23636}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

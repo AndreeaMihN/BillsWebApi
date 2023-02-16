@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Bill.Application.Features.Clients.Queries.GetClients
 {
-    public class GetClientsHandler : IRequestHandler<GetClientsQuery, IEnumerable<Client>>
+    public class GetClientsHandler : IRequestHandler<GetClientsQuery, List<Client>>
     {
         private readonly IBillUnitOfWork _billUnitOfWork;
         //private readonly IMapper _mapper;
@@ -15,7 +15,21 @@ namespace Bill.Application.Features.Clients.Queries.GetClients
             //_mapper = mapper;
         }
 
-        public async Task<IEnumerable<Client>> Handle(GetClientsQuery request,
-            CancellationToken cancellationToken) => await _billUnitOfWork.ClientReadOnlyRepository.GetAllClients();
+        public async Task<List<Client>> Handle(GetClientsQuery request,
+            CancellationToken cancellationToken)
+        {
+            List<Client> clients = new List<Client>();
+            try
+            {
+                clients = await _billUnitOfWork.ClientReadOnlyRepository.GetAllClients();
+            }
+            catch
+            {
+                throw new Exception("Failed to get list with all clients");
+            }
+
+            return clients;
+        }
+
     }
 }
