@@ -6,7 +6,7 @@ using Bill.Domain.Repositories;
 using Moq;
 using Xunit;
 
-namespace Bill.Application.Tests.Features.Clients.CreateClient
+namespace Bill.Application.Tests.Features.Clients.Commands.CreateClient
 {
     public class CreateClientCommandHandlerTests
     {
