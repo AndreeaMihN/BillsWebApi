@@ -3,35 +3,33 @@ using Bill.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Bill.Application.Features.Clients.Queries.GetClients
+namespace Bill.Application.Features.Clients.Queries.GetClients;
+
+public class GetClientsHandler : IRequestHandler<GetClientsQuery, List<Client>>
 {
-    public class GetClientsHandler : IRequestHandler<GetClientsQuery, List<Client>>
+    private readonly IBillUnitOfWork _billUnitOfWork;
+    private readonly ILogger<GetClientsHandler> _logger;
+
+    public GetClientsHandler(IBillUnitOfWork billUnitOfWork, ILogger<GetClientsHandler> logger)
     {
-        private readonly IBillUnitOfWork _billUnitOfWork;
-        private readonly ILogger<GetClientsHandler> _logger;
+        _billUnitOfWork = billUnitOfWork;
+        _logger = logger;
+    }
 
-        public GetClientsHandler(IBillUnitOfWork billUnitOfWork, ILogger<GetClientsHandler> logger)
+    public async Task<List<Client>> Handle(GetClientsQuery request,
+        CancellationToken cancellationToken)
+    {
+        List<Client> clients = new List<Client>();
+        try
         {
-            _billUnitOfWork = billUnitOfWork;
-            _logger = logger;
+            clients = await _billUnitOfWork.ClientReadOnlyRepository.GetAllClients();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Get clients failed, {@exception}", ex);
+            throw new Exception("Failed to get list with all clients");
         }
 
-        public async Task<List<Client>> Handle(GetClientsQuery request,
-            CancellationToken cancellationToken)
-        {
-            List<Client> clients = new List<Client>();
-            try
-            {
-                clients = await _billUnitOfWork.ClientReadOnlyRepository.GetAllClients();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Get clients failed, {@exception}", ex);
-                throw new Exception("Failed to get list with all clients");
-            }
-
-            return clients;
-        }
-
+        return clients;
     }
 }

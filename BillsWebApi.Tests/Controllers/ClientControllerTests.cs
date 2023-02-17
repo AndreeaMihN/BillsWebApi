@@ -7,43 +7,42 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
-namespace BillsWebApi.Tests.Controllers
+namespace BillsWebApi.Tests.Controllers;
+
+public class ClientControllerTests
 {
-    public class ClientControllerTests
+    private readonly ClientController controller;
+    private readonly ILogger<ClientController> logger;
+    private readonly Mock<IMediator> mockMediator;
+    private readonly Mock<ILogger<ClientController>> mockLogger;
+    private readonly Fixture fixture;
+
+    public ClientControllerTests()
     {
-        private readonly ClientController controller;
-        private readonly ILogger<ClientController> logger;
-        private readonly Mock<IMediator> mockMediator;
-        private readonly Mock<ILogger<ClientController>> mockLogger;
-        private readonly Fixture fixture;
+        mockMediator = new Mock<IMediator>();
+        mockLogger = new Mock<ILogger<ClientController>>();
+        controller = new ClientController(mockMediator.Object, mockLogger.Object);
+        fixture = new Fixture();
+    }
 
-        public ClientControllerTests()
-        {
-            mockMediator = new Mock<IMediator>();
-            mockLogger = new Mock<ILogger<ClientController>>();
-            controller = new ClientController(mockMediator.Object, mockLogger.Object);
-            fixture = new Fixture();
-        }
+    [Fact]
+    public async void CreateClientAsync_ValidClient_ReturnsOkResult()
+    {
+        // Arrange
+        var clientDto = fixture.Create<CreateClientDto>();
 
-        [Fact]
-        public async void CreateClientAsync_ValidClient_ReturnsOkResult()
-        {
-            // Arrange
-            var clientDto = fixture.Create<CreateClientDto>();
+        mockMediator.Setup(mediator => mediator.Send(It.IsAny<CreateClientCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
-            mockMediator.Setup(mediator => mediator.Send(It.IsAny<CreateClientCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
+        // Act
+        var result = await controller.CreateClientAsync(clientDto);
 
-            // Act
-            var result = await controller.CreateClientAsync(clientDto);
+        // Assert
+        var viewResult = Assert.IsType<OkObjectResult>(result);
+        Assert.NotNull(viewResult);
 
-            // Assert
-            var viewResult = Assert.IsType<OkObjectResult>(result);
-            Assert.NotNull(viewResult);
+        var boolResult = Assert.IsType<bool>(viewResult.Value);
+        Assert.True(boolResult);
 
-            var boolResult = Assert.IsType<bool>(viewResult.Value);
-            Assert.True(boolResult);
-
-            mockMediator.Verify(mediator => mediator.Send(It.IsAny<CreateClientCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-        }
+        mockMediator.Verify(mediator => mediator.Send(It.IsAny<CreateClientCommand>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

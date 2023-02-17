@@ -12,6 +12,7 @@ using MediatR;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 //DB Config
@@ -34,7 +35,6 @@ builder.Services.AddMediatR(typeof(GetClientsQuery));
 builder.Services.AddMediatR(typeof(CreateClientCommand));
 builder.Services.AddMediatR(typeof(CreateClientHandler));
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
-
 
 //Auto Mapper
 builder.Services.AddAutoMapper(cfg =>
