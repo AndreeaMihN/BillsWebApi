@@ -14,12 +14,14 @@ namespace BillsWebApi.Tests.Controllers
         private readonly ClientController controller;
         private readonly ILogger<ClientController> logger;
         private readonly Mock<IMediator> mockMediator;
+        private readonly Mock<ILogger<ClientController>> mockLogger;
         private readonly Fixture fixture;
 
         public ClientControllerTests()
         {
             mockMediator = new Mock<IMediator>();
-            controller = new ClientController(mockMediator.Object, logger);
+            mockLogger = new Mock<ILogger<ClientController>>();
+            controller = new ClientController(mockMediator.Object, mockLogger.Object);
             fixture = new Fixture();
         }
 

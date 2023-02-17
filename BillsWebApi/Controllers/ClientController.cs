@@ -21,7 +21,7 @@ namespace BillsWebApi.Controllers
         [HttpGet]
         public async Task<ActionResult> GetClientsAsync()
         {
-            _logger.LogInformation("GET GetClientsAysnc was performed");
+            _logger.LogInformation("GET GetClientsAsync was performed");
             var clients = await _mediator.Send(new GetClientsQuery());
             return Ok(clients);
         }

@@ -2,6 +2,7 @@ using AutoFixture;
 using Bill.Domain.Clients;
 using Bill.Infrastructure.Contexts;
 using Bill.Infrastructure.Domain.Clients;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using Moq;
 using Xunit;
@@ -12,12 +13,14 @@ namespace Bill.Infrastructure.Tests.Domain.Clients
     {
         private readonly ClientCommandRepository clientCommandRepository;
         private readonly Mock<IClientContext> mockClientContext;
+        private readonly Mock<ILogger<ClientCommandRepository>> mockLogger;
         private readonly Fixture fixture = new Fixture();
 
         public ClientCommandRespositoryTests()
         {
             mockClientContext = new Mock<IClientContext>();
-            clientCommandRepository = new ClientCommandRepository(mockClientContext.Object);
+            mockLogger = new Mock<ILogger<ClientCommandRepository>>();
+            clientCommandRepository = new ClientCommandRepository(mockClientContext.Object, mockLogger.Object);
         }
 
         [Fact]

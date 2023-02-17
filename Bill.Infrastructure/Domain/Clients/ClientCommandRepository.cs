@@ -1,15 +1,18 @@
 ﻿using Bill.Domain.Clients;
 using Bill.Infrastructure.Contexts;
+using Microsoft.Extensions.Logging;
 
 namespace Bill.Infrastructure.Domain.Clients
 {
     public class ClientCommandRepository : IClientCommandRepository
     {
         private readonly IClientContext _context;
+        private readonly ILogger<ClientCommandRepository> _logger;
 
-        public ClientCommandRepository(IClientContext context)
+        public ClientCommandRepository(IClientContext context, ILogger<ClientCommandRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task CreateAsync(Client client)
@@ -22,6 +25,7 @@ namespace Bill.Infrastructure.Domain.Clients
             }
             catch (Exception ex)
             {
+                _logger.LogError("CreateAsync failed, {@exception}", ex);
                 throw new Exception("Failed to insert in DB a new client {@ex}", ex);
             }
         }

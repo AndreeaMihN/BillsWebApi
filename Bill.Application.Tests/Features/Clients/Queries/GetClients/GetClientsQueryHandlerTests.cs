@@ -1,8 +1,8 @@
 ﻿using AutoFixture;
 using Bill.Application.Features.Clients.Queries.GetClients;
-using Bill.Application.Tests.Mocks;
 using Bill.Domain.Clients;
 using Bill.Domain.Repositories;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
 using Xunit;
@@ -13,16 +13,16 @@ namespace Bill.Application.Tests.Features.Clients.Queries.GetClients
     {
         private readonly GetClientsHandler getClientsHandler;
         private readonly Mock<IBillUnitOfWork> mockBillUnitOfWork;
-        //private readonly Mock<IMapper> mockMapper;
+        private readonly Mock<ILogger<GetClientsHandler>> mockLogger;
         private readonly Fixture fixture;
         private readonly GetClientsQuery getClientsQuery;
         private readonly List<Client> clients;
 
         public GetClientsQueryHandlerTests()
         {
-            //mockMapper = new Mock<IMapper>();
             mockBillUnitOfWork = new Mock<IBillUnitOfWork>();
-            getClientsHandler = new GetClientsHandler(mockBillUnitOfWork.Object);
+            mockLogger = new Mock<ILogger<GetClientsHandler>>();
+            getClientsHandler = new GetClientsHandler(mockBillUnitOfWork.Object, mockLogger.Object);
 
             fixture = new Fixture();
             getClientsQuery = fixture.Create<GetClientsQuery>();
@@ -33,7 +33,7 @@ namespace Bill.Application.Tests.Features.Clients.Queries.GetClients
         public async void GetClientsHandler_ReturnValue()
         {
             //Arrange
-            mockBillUnitOfWork.Setup(billUnitOfWork => billUnitOfWork.ClientReadOnlyRepository.GetAllClients()).ReturnsAsync(ClientMocks.GetClientList());
+            mockBillUnitOfWork.Setup(billUnitOfWork => billUnitOfWork.ClientReadOnlyRepository.GetAllClients()).ReturnsAsync(clients);
 
             //Act
             var result = await getClientsHandler.Handle(getClientsQuery, It.IsAny<CancellationToken>());
