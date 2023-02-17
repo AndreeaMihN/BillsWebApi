@@ -1,9 +1,8 @@
-﻿namespace Bill.Domain.Clients
-{
-    public interface IClientReadOnlyRepository
-    {
-        Task<List<Client>> GetAllClients();
+﻿namespace Bill.Domain.Clients;
 
-        //Task<Client> GetClientById(string id);
-    }
+public interface IClientReadOnlyRepository
+{
+    Task<List<Client>> GetAllClients();
+
+    //Task<Client> GetClientById(string id);
 }

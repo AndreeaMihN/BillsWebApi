@@ -1,5 +1,5 @@
-﻿using Swashbuckle.AspNetCore.Filters;
-using Bill.Application.Features.Clients.Commands.CreateClient;
+﻿using Bill.Application.Features.Clients.Commands.CreateClient;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace Management.Api.SwaggerExamples;
 

@@ -1,10 +1,9 @@
 ﻿using Bill.Domain.Clients;
 
-namespace Bill.Domain.Repositories
+namespace Bill.Domain.Repositories;
+
+public interface IBillUnitOfWork
 {
-    public interface IBillUnitOfWork
-    {
-        IClientReadOnlyRepository ClientReadOnlyRepository { get; }
-        IClientCommandRepository ClientCommandRepository { get; }
-    }
+    IClientReadOnlyRepository ClientReadOnlyRepository { get; }
+    IClientCommandRepository ClientCommandRepository { get; }
 }

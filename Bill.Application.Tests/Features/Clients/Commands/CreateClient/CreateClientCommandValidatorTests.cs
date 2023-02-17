@@ -2,60 +2,59 @@ using Bill.Application.Common;
 using Bill.Application.Features.Clients.Commands.CreateClient;
 using Xunit;
 
-namespace Bill.Application.Tests.Features.Clients.Commands.CreateClient
+namespace Bill.Application.Tests.Features.Clients.Commands.CreateClient;
+
+public class CreateClientCommandValidatorTests
 {
-    public class CreateClientCommandValidatorTests
+    private readonly CreateClientCommandValidator createClientCommandValidator;
+
+    public CreateClientCommandValidatorTests()
     {
-        private readonly CreateClientCommandValidator createClientCommandValidator;
+        createClientCommandValidator = new CreateClientCommandValidator();
+    }
 
-        public CreateClientCommandValidatorTests()
+    [Fact]
+    public void CreateClientValidator_ValidClient_ReturnSuccess()
+    {
+        var validClient = new CreateClientDto()
         {
-            createClientCommandValidator = new CreateClientCommandValidator();
-        }
+            FirstName = "Test",
+            LastName = "Test",
+            Email = "Test@email.com",
+            PersonalIdentificationNumber = "Test"
+        };
 
-        [Fact]
-        public void CreateClientValidator_ValidClient_ReturnSuccess()
+        Assert.True(createClientCommandValidator.Validate(validClient).IsValid);
+    }
+
+    [Theory]
+    [InlineData(null, null, null, null)]
+    [InlineData("", "", "", "")]
+    [InlineData(ValidatorsHelper.MaxLength256, ValidatorsHelper.MaxLength256, ValidatorsHelper.EmailWith256Characters, ValidatorsHelper.MaxLength256)]
+    public void CreateClientValidator_InvalidClient_ReturnBadRequest(string firstName, string lastName, string email, string personalIdentificationNumber)
+    {
+        var validClient = new CreateClientDto()
         {
-            var validClient = new CreateClientDto()
-            {
-                FirstName = "Test",
-                LastName = "Test",
-                Email = "Test@email.com",
-                PersonalIdentificationNumber = "Test"
-            };
+            FirstName = firstName,
+            LastName = lastName,
+            Email = email,
+            PersonalIdentificationNumber = personalIdentificationNumber
+        };
 
-            Assert.True(createClientCommandValidator.Validate(validClient).IsValid);
-        }
+        Assert.False(createClientCommandValidator.Validate(validClient).IsValid);
+    }
 
-        [Theory]
-        [InlineData(null, null, null, null)]
-        [InlineData("", "", "", "")]
-        [InlineData(ValidatorsHelper.MaxLength256, ValidatorsHelper.MaxLength256, ValidatorsHelper.EmailWith256Characters, ValidatorsHelper.MaxLength256)]
-        public void CreateClientValidator_InvalidClient_ReturnBadRequest(string firstName, string lastName, string email, string personalIdentificationNumber)
+    [Fact]
+    public void CreateClientValidator_InvalidEmailClient_ReturnBadRequest()
+    {
+        var validClient = new CreateClientDto()
         {
-            var validClient = new CreateClientDto()
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                Email = email,
-                PersonalIdentificationNumber = personalIdentificationNumber
-            };
+            FirstName = "Test",
+            LastName = "Test",
+            Email = ValidatorsHelper.InvalidEmail,
+            PersonalIdentificationNumber = "Test"
+        };
 
-            Assert.False(createClientCommandValidator.Validate(validClient).IsValid);
-        }
-
-        [Fact]
-        public void CreateClientValidator_InvalidEmailClient_ReturnBadRequest()
-        {
-            var validClient = new CreateClientDto()
-            {
-                FirstName = "Test",
-                LastName = "Test",
-                Email = ValidatorsHelper.InvalidEmail,
-                PersonalIdentificationNumber = "Test"
-            };
-
-            Assert.False(createClientCommandValidator.Validate(validClient).IsValid);
-        }
+        Assert.False(createClientCommandValidator.Validate(validClient).IsValid);
     }
 }
