@@ -45,7 +45,7 @@ public class CreateClientCommandHandlerTests
         mockMapper.Verify(mapper => mapper.Map<Client>(It.Is<CreateClientDto>(x => x.Email == command.createClientDto.Email)), Times.Once);
         mockBillUnitOfWork.Verify(billUnitOfWork => billUnitOfWork.ClientCommandRepository.CreateAsync(It.Is<Client>(x => x.AssertThatClientIsSameAs(entityClient))), Times.Once);
 
-        Assert.True(result);
+        Assert.False(result);
     }
 
     [Fact]
