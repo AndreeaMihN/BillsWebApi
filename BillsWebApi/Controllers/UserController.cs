@@ -41,6 +41,7 @@ public class UserController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Create([FromBody] User user)
     {
+        _logger.LogInformation("POST CreateUserAsync started");
 
         ApplicationUser appUser = new ApplicationUser
         {

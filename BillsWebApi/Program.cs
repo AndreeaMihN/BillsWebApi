@@ -14,32 +14,29 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetSection("MongoDB:ConnectionString")?.Value ?? "";
+var database = builder.Configuration.GetSection("MongoDB:Database")?.Value ?? "";
 
 //DB Config
 builder.Services.Configure<UserConfiguration>(
-    options =>
-    {
-        options.ConnectionString = builder.Configuration.GetSection("MongoDB:ConnectionString")?.Value ?? "";
-        options.Database = builder.Configuration.GetSection("MongoDB:Database")?.Value ?? "";
-        //Add identity
-        //var mongoDbSettings = builder.Configuration.GetSection(nameof(MongoDbConfig)).Get<MongoDbConfig>();
-        //builder.Services.AddIdentity<ApplicationUser, ApplicationRole>().AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(
-        //    options.ConnectionString, options.Database);
-
-        builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options => options.User.RequireUniqueEmail = false).AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(
-            options.ConnectionString, options.Database);
-
-
-    }
+options =>
+{
+    options.ConnectionString = connectionString;
+    options.Database = database;
+    //Add identity
+    //var mongoDbSettings = builder.Configuration.GetSection(nameof(MongoDbConfig)).Get<MongoDbConfig>();
+    //builder.Services.AddIdentity<ApplicationUser, ApplicationRole>().AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(
+    //    options.ConnectionString, options.Database);
+}
 );
+
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>().AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(connectionString, database);
 
 // Add services to the container.
 builder.Services.AddSingleton<IUserContext, UserContext>();
 builder.Services.AddScoped<IUserReadOnlyRepository, UserReadOnlyRepository>();
 builder.Services.AddScoped<IUserCommandRepository, UserCommandRepository>();
 builder.Services.AddScoped<IBillUnitOfWork, BillUnitOfWork>();
-
-
 
 // add mediators querries/commands
 builder.Services.AddMediatR(typeof(GetUsersQuery));
