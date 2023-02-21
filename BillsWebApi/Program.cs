@@ -1,10 +1,10 @@
-using Bill.Application.Features.Clients.Commands.CreateClient;
-using Bill.Application.Features.Clients.Queries.GetClients;
-using Bill.Domain.Clients;
+using Bill.Application.Features.Users.Commands.CreateUser;
+using Bill.Application.Features.Users.Queries.GetUsers;
 using Bill.Domain.Repositories;
+using Bill.Domain.Users;
 using Bill.Infrastructure.Configurations;
 using Bill.Infrastructure.Contexts;
-using Bill.Infrastructure.Domain.Clients;
+using Bill.Infrastructure.Domain.Users;
 using Bill.Infrastructure.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -16,24 +16,35 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 //DB Config
-builder.Services.Configure<ClientConfiguration>(
+builder.Services.Configure<UserConfiguration>(
     options =>
     {
         options.ConnectionString = builder.Configuration.GetSection("MongoDB:ConnectionString")?.Value ?? "";
         options.Database = builder.Configuration.GetSection("MongoDB:Database")?.Value ?? "";
+        //Add identity
+        //var mongoDbSettings = builder.Configuration.GetSection(nameof(MongoDbConfig)).Get<MongoDbConfig>();
+        //builder.Services.AddIdentity<ApplicationUser, ApplicationRole>().AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(
+        //    options.ConnectionString, options.Database);
+
+        builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options => options.User.RequireUniqueEmail = false).AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(
+            options.ConnectionString, options.Database);
+
+
     }
 );
 
 // Add services to the container.
-builder.Services.AddSingleton<IClientContext, ClientContext>();
-builder.Services.AddScoped<IClientReadOnlyRepository, ClientReadOnlyRepository>();
-builder.Services.AddScoped<IClientCommandRepository, ClientCommandRepository>();
+builder.Services.AddSingleton<IUserContext, UserContext>();
+builder.Services.AddScoped<IUserReadOnlyRepository, UserReadOnlyRepository>();
+builder.Services.AddScoped<IUserCommandRepository, UserCommandRepository>();
 builder.Services.AddScoped<IBillUnitOfWork, BillUnitOfWork>();
 
+
+
 // add mediators querries/commands
-builder.Services.AddMediatR(typeof(GetClientsQuery));
-builder.Services.AddMediatR(typeof(CreateClientCommand));
-builder.Services.AddMediatR(typeof(CreateClientHandler));
+builder.Services.AddMediatR(typeof(GetUsersQuery));
+builder.Services.AddMediatR(typeof(CreateUserCommand));
+builder.Services.AddMediatR(typeof(CreateUserHandler));
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
 //Auto Mapper
@@ -73,7 +84,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 
 // validators
-builder.Services.AddValidatorsFromAssemblyContaining<CreateClientCommand>(); // register validators
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserCommand>(); // register validators
 
 builder.Services
             .AddFluentValidationAutoValidation()
