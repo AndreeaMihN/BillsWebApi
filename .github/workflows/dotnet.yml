@@ -25,25 +25,54 @@ jobs:
         with:
           dotnet-version: '7.0.x'
 
-      - name: Install dependencies
-        run: dotnet restore
+      - task: DotNetCoreCLI@2
+        displayName: 'Install dependencies'
+        inputs:
+          command: dotnet restore
+        
+      - task: DotNetCoreCLI@2
+        displayName: 'Check code formatting'
+        inputs:
+          command: 'custom'
+          projects: '**/*.sln'
+          custom: 'format'
+          arguments: '--check'
 
-      - name: Sonarqube Begin
-        run: | 
-          dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"AndreeaMihN_BillsWebApi" /o:"amigos" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml 
+      - task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01–2965cd301255.SonarCloudPrepare@1
+        displayName: Prepare analysis on SonarCloud
+        inputs:
+          command: | 
+            dotnet tool install --global dotnet-sonarscanner
+            dotnet sonarscanner begin /k:"AndreeaMihN_BillsWebApi" /o:"amigos" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml 
+            sonar.cs.xunit.reportsPaths=${Agent.TempDirectory}/**/XUnit.TestResults.xml 
+            sonar.cs.opencover.reportsPaths=${Agent.TempDirectory}/**/opencoverCoverage.xml
 
-      - name: Build
-        run: dotnet build
+      - task: DotNetCoreCLI@2
+        displayName: Build
+        inputs:
+          command: dotnet build
+      
+      - task: DotNetCoreCLI@2
+        displayName: Test
+        inputs:
+          command: test
+          projects: '**/*.Test*.csproj'
+          arguments: '--configuration $(BuildConfiguration) --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:IncludeTestAssembly=false'
 
-      - name: Test with the dotnet CLI
-        run: |
-          dotnet tool install --global dotnet-coverage
-          dotnet test --settings coverlet.runsettings --logger:trx
-          dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
-        env:
-          ASPNETCORE_ENVIRONMENT: Development
+      - task: SonarQubeAnalyze@5
+        displayName: 'Run Sonar Code Analysis'
 
+      - task: SonarQubePublish@5
+        displayName: 'Publish  Sonar Quality Gate Result'
+  
+      - task: PublishTestResults@2
+        displayName: "Publish Test Results"
+        inputs:
+          testResultsFormat: VSTest
+          testResultsFiles: "$(Agent.TempDirectory)/**.*trx"
+          mergeTestResults: true
+          condition: succeededOrFailed()
+        
       - name: Sonarqube end
         run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
         env:
