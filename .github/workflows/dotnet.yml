@@ -26,7 +26,9 @@ jobs:
           dotnet-version: '7.0.x'
 
       - name: Install dependencies
-        run: dotnet restore
+        run: |
+          dotnet tool install --global dotnet-coverage
+          dotnet restore
 
       - name: Sonarqube Begin
         run: | 
@@ -38,9 +40,7 @@ jobs:
 
       - name: Test with the dotnet CLI
         run: |
-          dotnet tool install --global dotnet-coverage
-          dotnet test --settings coverlet.runsettings --logger:trx
-          dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
+          dotnet-coverage collect "dotnet test --settings coverlet.runsettings --logger:trx" -f xml -o "coverage.xml"
         env:
           ASPNETCORE_ENVIRONMENT: Development
 
