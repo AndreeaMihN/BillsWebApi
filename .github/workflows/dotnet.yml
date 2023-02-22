@@ -31,13 +31,17 @@ jobs:
       - name: Sonarqube Begin
         run: | 
           dotnet tool install --global dotnet-sonarscanner
+          dotnet tool install --global  dotnet-reportgenerator-globaltool
           dotnet sonarscanner begin /k:"AndreeaMihN_BillsWebApi" /o:"amigos" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /s:$GITHUB_WORKSPACE/a/BillsWebApi/BillsWebApi/SonarQube.Analysis.xml
-
+    
       - name: Build
         run: dotnet build
 
       - name: Test with the dotnet CLI
-        run: dotnet test --settings coverlet.runsettings --logger:trx
+        run: |
+          dotnet test --settings coverlet.runsettings --logger:trx
+          dotnet test --no-build --collect:"XPlat Code Coverage"
+          reportgenerator "-reports:*\TestResults\*\coverage.cobertura.xml" "-targetdir:sonarqubecoverage" "-reporttypes:SonarQube"
         env:
           ASPNETCORE_ENVIRONMENT: Development
 
