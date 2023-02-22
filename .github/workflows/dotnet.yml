@@ -27,9 +27,6 @@ jobs:
 
       - name: Install dependencies
         run: dotnet restore
-        
-      - name: Check code formatting
-        uses: ./.github/workflows/dotnet-format.yml
 
       - name: Sonarqube Begin
         run: | 
