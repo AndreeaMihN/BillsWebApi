@@ -33,7 +33,7 @@ jobs:
       - name: Sonarqube Begin
         run: | 
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"AndreeaMihN_BillsWebApi" /o:"amigos" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=D:/a/BillsWebApi/BillsWebApi/coverage.xml 
+          dotnet sonarscanner begin /k:"AndreeaMihN_BillsWebApi" /o:"amigos" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths=D:/a/BillsWebApi/BillsWebApi/coverage.xml /d:sonar.cs.vscoveragexml.reportsPaths=D:/a/BillsWebApi/BillsWebApi/coverage.xml 
 
       - name: Build
         run: dotnet build --no-incremental
