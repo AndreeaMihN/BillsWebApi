@@ -38,6 +38,7 @@ jobs:
 
       - name: Test with the dotnet CLI
         run: |
+          dotnet tool install --global dotnet-coverage
           dotnet test --settings coverlet.runsettings --logger:trx
           dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
         env:
