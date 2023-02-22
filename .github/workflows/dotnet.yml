@@ -33,14 +33,14 @@ jobs:
       - name: Sonarqube Begin
         run: | 
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"AndreeaMihN_BillsWebApi" /o:"amigos" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml 
+          dotnet sonarscanner begin /k:"AndreeaMihN_BillsWebApi" /o:"amigos" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=D:/a/BillsWebApi/BillsWebApi/coverage.xml 
 
       - name: Build
-        run: dotnet build
+        run: dotnet build --no-incremental
 
       - name: Test with the dotnet CLI
         run: |
-          dotnet-coverage collect "dotnet test --settings coverlet.runsettings --logger:trx" -f xml -o "coverage.xml"
+          dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
         env:
           ASPNETCORE_ENVIRONMENT: Development
 
