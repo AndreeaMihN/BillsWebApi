@@ -32,7 +32,12 @@ jobs:
         run: | 
           dotnet tool install --global dotnet-sonarscanner
           dotnet sonarscanner begin /k:"AndreeaMihN_BillsWebApi" /o:"amigos" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /s:$GITHUB_WORKSPACE/a/BillsWebApi/BillsWebApi/SonarQube.Analysis.xml
-
+          coverlet .\BillsWebApi.Tests\bin\Debug\net7.0\BillsWebApi.Tests.dll
+          --target "dotnet" 
+          --targetargs "test --no-build"
+          -f=opencover 
+          -o="coverage.xml"
+    
       - name: Build
         run: dotnet build
 
