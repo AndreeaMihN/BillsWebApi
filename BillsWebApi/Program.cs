@@ -106,6 +106,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllOrigins");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
