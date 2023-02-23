@@ -33,17 +33,17 @@ jobs:
       - name: Sonarqube Begin
         run: | 
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"AndreeaMihN_BillsWebApi" /o:"amigos" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.dotcover.reportsPaths=D:\a\_temp\**\*.trx 
+          dotnet sonarscanner begin /k:"AndreeaMihN_BillsWebApi" /o:"amigos" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.dotcover.reportsPaths=D:/a/BillsWebApi/BillsWebApi/dotCover.Output.html 
 
       - name: Build
         run: dotnet build --no-incremental
 
       - name: Test with the dotnet CLI
         run: dotnet dotcover test --dcReportType=HTML
-        env:
-          ASPNETCORE_ENVIRONMENT: Development
 
       - name: Sonarqube end
         run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+
