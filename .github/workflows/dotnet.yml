@@ -50,11 +50,9 @@ jobs:
       - name: Analyze with SonarCloud
         uses: sonarsource/sonarcloud-github-action@master
         with:
-          projectBaseDir: my-custom-directory
           args: >
             -Dsonar.organization="amigos"
             -Dsonar.projectKey="AndreeaMihN_BillsWebApi"
-            -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.sources=lib/
             -Dsonar.test.exclusions=tests/**
             -Dsonar.tests=tests/
