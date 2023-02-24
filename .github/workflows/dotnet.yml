@@ -33,7 +33,7 @@ jobs:
       - name: Sonarqube Begin
         run: | 
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"AndreeaMihN_BillsWebApi" /o:"amigos" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.dotcover.reportsPaths=D:/a/BillsWebApi/BillsWebApi/dotCover.Output.html 
+          dotnet sonarscanner begin /k:"BillsWebApi" /d:sonar.host.url="http://localhost:9000"  /d:sonar.login="sqp_3bc0c13fe19203e202779130cc1c951d75aeb700"
 
       - name: Build
         run: dotnet build --no-incremental
@@ -41,14 +41,30 @@ jobs:
       - name: Test with the dotnet CLI
         run: dotnet dotcover test --dcReportType=HTML
         
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
+      # Triggering SonarQube analysis as results of it are required by Quality Gate check.
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      # Check the Quality Gate status.
+      - name: SonarQube Quality Gate check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        # Force to fail step after specific time.
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} #OPTIONAL
+
+      # Optionally you can use the output from the Quality Gate in another step.
+      # The possible outputs of the `quality-gate-status` variable are `PASSED`, `WARN` or `FAILED`.
+      - name: "Example show SonarQube Quality Gate Status value"
+        run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
           
       - name: Sonarqube end
-        run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        run: dotnet sonarscanner end /d:sonar.login="sqp_3bc0c13fe19203e202779130cc1c951d75aeb700"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
