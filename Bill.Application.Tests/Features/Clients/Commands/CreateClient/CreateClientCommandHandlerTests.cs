@@ -29,13 +29,6 @@ public class CreateClientCommandHandlerTests
         fixture = new Fixture();
         command = fixture.Create<CreateClientCommand>();
         entityClient = fixture.Create<Client>();
-        entityClient = fixture.Create<Client>();
-        entityClient = fixture.Create<Client>();
-        entityClient = fixture.Create<Client>();
-        entityClient = fixture.Create<Client>();
-        entityClient = fixture.Create<Client>();
-        entityClient = fixture.Create<Client>();
-        entityClient = fixture.Create<Client>();
     }
 
     [Fact]
