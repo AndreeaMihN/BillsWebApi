@@ -40,12 +40,7 @@ jobs:
 
       - name: Test with the dotnet CLI
         run: dotnet dotcover test --dcReportType=HTML
-
-      - name: Sonarqube end
-        run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+        
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
@@ -64,4 +59,11 @@ jobs:
             -Dsonar.test.exclusions=tests/**
             -Dsonar.tests=tests/
             -Dsonar.verbose=true
+
+      - name: Sonarqube end
+        run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      
 
