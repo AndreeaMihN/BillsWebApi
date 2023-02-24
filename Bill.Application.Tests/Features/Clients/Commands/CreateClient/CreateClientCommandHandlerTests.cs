@@ -44,6 +44,7 @@ public class CreateClientCommandHandlerTests
         // Arrange
         mockMapper.Setup(mapper => mapper.Map<Client>(It.IsAny<CreateClientDto>())).Returns(entityClient);
         mockBillUnitOfWork.Setup(billUnitOfWork => billUnitOfWork.ClientCommandRepository.CreateAsync(It.IsAny<Client>()));
+        mockBillUnitOfWork.Setup(billUnitOfWork => billUnitOfWork.ClientCommandRepository.CreateAsync(It.IsAny<Client>()));
 
         // Act
         var result = await createClientHandler.Handle(command, It.IsAny<CancellationToken>());
