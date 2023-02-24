@@ -33,7 +33,7 @@ jobs:
       - name: Sonarqube Begin
         run: | 
           dotnet tool install --global dotnet-sonarscanner
-          sonar-scanner.bat -D"sonar.projectKey=BillsWebApi" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9000" -D"sonar.login=sqp_3bc0c13fe19203e202779130cc1c951d75aeb700"
+          dotnet-sonarscanner begin -D"sonar.projectKey=BillsWebApi" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9000" -D"sonar.login=sqp_3bc0c13fe19203e202779130cc1c951d75aeb700"
 
 
       - name: Build
