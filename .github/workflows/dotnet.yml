@@ -49,6 +49,9 @@ jobs:
       # Triggering SonarQube analysis as results of it are required by Quality Gate check.
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       # Check the Quality Gate status.
       - name: SonarQube Quality Gate check
@@ -58,6 +61,9 @@ jobs:
           scanMetadataReportFile: .sonarqube/out/.sonar/report-task.txt
         # Force to fail step after specific time.
         timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       # Optionally you can use the output from the Quality Gate in another step.
       # The possible outputs of the `quality-gate-status` variable are `PASSED`, `WARN` or `FAILED`.
