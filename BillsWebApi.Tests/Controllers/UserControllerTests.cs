@@ -27,7 +27,7 @@ public class UserControllerTests
         mockMediator = new Mock<IMediator>();
         mockUserManager = new Mock<UserManager<ApplicationUser>>();
         mockLogger = new Mock<ILogger<UserController>>();
-        controller = new UserController(mockMediator.Object, mockLogger.Object, mockUserManager.Object, mockRoleManager.Object, mockSignInManager.Object);
+        controller = new UserController(mockMediator.Object, mockLogger.Object);
         fixture = new Fixture();
     }
 

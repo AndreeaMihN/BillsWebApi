@@ -1,11 +1,13 @@
 using Bill.Application.Features.Users.Commands.CreateUser;
 using Bill.Application.Features.Users.Queries.GetUsers;
 using Bill.Domain.Repositories;
+using Bill.Domain.Services;
 using Bill.Domain.Users;
 using Bill.Infrastructure.Configurations;
 using Bill.Infrastructure.Contexts;
 using Bill.Infrastructure.Domain.Users;
 using Bill.Infrastructure.Repositories;
+using Bill.Infrastructure.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -37,6 +39,7 @@ builder.Services.AddSingleton<IUserContext, UserContext>();
 builder.Services.AddScoped<IUserReadOnlyRepository, UserReadOnlyRepository>();
 builder.Services.AddScoped<IUserCommandRepository, UserCommandRepository>();
 builder.Services.AddScoped<IBillUnitOfWork, BillUnitOfWork>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 // add mediators querries/commands
 builder.Services.AddMediatR(typeof(GetUsersQuery));

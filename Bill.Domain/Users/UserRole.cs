@@ -1,6 +1,8 @@
-﻿namespace Bill.Domain.Users;
+﻿using Microsoft.AspNetCore.Identity;
 
-public class UserRole
+namespace Bill.Domain.Users;
+
+public class UserRole : IdentityUserRole<Guid>
 {
     public string RoleName { get; set; }
 }

@@ -11,8 +11,7 @@ namespace Bill.Application.Tests
             Assert.Multiple(() =>
             {
                 Assert.Equal(actualUser.Id, expectedUser.Id);
-                Assert.Equal(actualUser.FirstName, expectedUser.FirstName);
-                Assert.Equal(actualUser.LastName, expectedUser.LastName);
+                Assert.Equal(actualUser.UserName, expectedUser.UserName);
                 Assert.Equal(actualUser.Email, expectedUser.Email);
                 Assert.Equal(actualUser.IsActive, expectedUser.IsActive);
                 Assert.Equal(actualUser.PersonalIdentificationNumber, expectedUser.PersonalIdentificationNumber);
