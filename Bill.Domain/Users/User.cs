@@ -8,9 +8,9 @@ namespace Bill.Domain.Users;
 [BsonIgnoreExtraElements]
 public class User
 {
-    [BsonId]
+    [BsonIgnore]
     //[BsonRepresentation(BsonType.ObjectId)]
-    [JsonConverter(typeof(ObjectIdConverter))]
+    //[JsonConverter(typeof(ObjectIdConverter))]
     public Guid? Id { get; set; }
 
     [BsonElement("userName")]
