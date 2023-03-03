@@ -1,10 +1,12 @@
 ﻿using Bill.Application.Features.Users.Commands.CreateUser;
 using Bill.Application.Features.Users.Queries.GetUsers;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillsWebApi.Controllers;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class UserController : ControllerBase

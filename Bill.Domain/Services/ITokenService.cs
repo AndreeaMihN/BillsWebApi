@@ -1,9 +1,11 @@
 ﻿using Bill.Domain.Users;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Bill.Domain.Services
 {
     public interface ITokenService
     {
-        Task<string> CreateToken(ApplicationUser user);
+        JwtSecurityToken GenerateAccessToken(List<Claim> claims);
     }
 }
