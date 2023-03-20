@@ -8,7 +8,7 @@ on:
     
 jobs:
   validate-changes:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Set up JDK 11
         uses: actions/setup-java@v3
@@ -26,25 +26,25 @@ jobs:
           dotnet-version: '7.0.x'
 
       - name: Install dependencies
-        run: dotnet restore
+        run: |
+          dotnet tool install --global JetBrains.dotCover.GlobalTool
+          dotnet restore
 
       - name: Sonarqube Begin
         run: | 
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"AndreeaMihN_BillsWebApi" /o:"amigos" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml 
+          dotnet sonarscanner begin /k:"AndreeaMihN_BillsWebApi" /o:"amigos" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.dotcover.reportsPaths="${GITHUB_WORKSPACE}/dotCover.Output.html" -d:sonar.qualitygate.wait=true
 
       - name: Build
-        run: dotnet build
+        run: dotnet build --no-incremental
 
       - name: Test with the dotnet CLI
-        run: |
-          dotnet tool install --global dotnet-coverage
-          dotnet test --settings coverlet.runsettings --logger:trx
-          dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
-        env:
-          ASPNETCORE_ENVIRONMENT: Development
-
+        run: dotnet dotcover test --dcReportType=HTML
+          
       - name: Sonarqube end
-        run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        run: dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      
+
