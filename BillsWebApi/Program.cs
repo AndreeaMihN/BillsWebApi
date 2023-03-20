@@ -1,39 +1,69 @@
-using Bill.Application.Features.Clients.Commands.CreateClient;
-using Bill.Application.Features.Clients.Queries.GetClients;
-using Bill.Domain.Clients;
+using Bill.Application.Features.Users.Commands.CreateUser;
+using Bill.Application.Features.Users.Queries.GetUsers;
 using Bill.Domain.Repositories;
+using Bill.Domain.Services;
+using Bill.Domain.Users;
 using Bill.Infrastructure.Configurations;
 using Bill.Infrastructure.Contexts;
-using Bill.Infrastructure.Domain.Clients;
+using Bill.Infrastructure.Domain.Users;
 using Bill.Infrastructure.Repositories;
+using Bill.Infrastructure.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var configuration = builder.Configuration;
+
 //DB Config
-builder.Services.Configure<ClientConfiguration>(
+builder.Services.Configure<UserConfiguration>(
     options =>
     {
-        options.ConnectionString = builder.Configuration.GetSection("MongoDB:ConnectionString")?.Value ?? "";
-        options.Database = builder.Configuration.GetSection("MongoDB:Database")?.Value ?? "";
+        options.ConnectionString = configuration["MongoDB:ConnectionString"];
+        options.Database = configuration["MongoDB:Database"];
     }
 );
 
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>().AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(configuration["MongoDB:ConnectionString"], configuration["MongoDB:Database"]);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = false;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = configuration["JWT:ValidAudience"],
+        ValidIssuer = configuration["JWT:ValidIssuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+    };
+});
+
 // Add services to the container.
-builder.Services.AddSingleton<IClientContext, ClientContext>();
-builder.Services.AddScoped<IClientReadOnlyRepository, ClientReadOnlyRepository>();
-builder.Services.AddScoped<IClientCommandRepository, ClientCommandRepository>();
+builder.Services.AddSingleton<IUserContext, UserContext>();
+builder.Services.AddScoped<IUserReadOnlyRepository, UserReadOnlyRepository>();
+builder.Services.AddScoped<IUserCommandRepository, UserCommandRepository>();
 builder.Services.AddScoped<IBillUnitOfWork, BillUnitOfWork>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 // add mediators querries/commands
-builder.Services.AddMediatR(typeof(GetClientsQuery));
-builder.Services.AddMediatR(typeof(CreateClientCommand));
-builder.Services.AddMediatR(typeof(CreateClientHandler));
+builder.Services.AddMediatR(typeof(GetUsersQuery));
+builder.Services.AddMediatR(typeof(CreateUserCommand));
+builder.Services.AddMediatR(typeof(CreateUserHandler));
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
 //Auto Mapper
@@ -54,6 +84,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -73,7 +104,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 
 // validators
-builder.Services.AddValidatorsFromAssemblyContaining<CreateClientCommand>(); // register validators
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserCommand>(); // register validators
 
 builder.Services
             .AddFluentValidationAutoValidation()
@@ -98,6 +129,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllOrigins");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
