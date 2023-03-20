@@ -16,10 +16,8 @@ public class AuthenticationController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ITokenService _tokenService;
     private readonly ILogger<UserController> _logger;
-    private readonly IConfiguration _configuration;
 
     public AuthenticationController(
         UserManager<ApplicationUser> userManager,
@@ -32,16 +30,9 @@ public class AuthenticationController : ControllerBase
     {
         _userManager = userManager;
         _roleManager = roleManager;
-        _signInManager = signInManager;
         _tokenService = tokenService;
         _logger = logger;
-        _configuration = configuration;
     }
-
-    //private async Task<bool> UserExists(string username)
-    //{
-    //    return await _userManager.Users.AnyAsync(x => x.UserName == username.ToLower());
-    //}
 
     private async Task<bool> UserExists(string username)
     {
@@ -117,35 +108,6 @@ public class AuthenticationController : ControllerBase
             throw new Exception("Failed to insert in DB a new user {@ex}", ex);
         }
     }
-
-    //[HttpPost("login")]
-    //[AllowAnonymous]
-    //public async Task<ActionResult<UserDto>> LoginAndreea(LoginDto loginDto)
-    //{
-    //    _logger.LogInformation("Login");
-    //    try
-    //    {
-    //        var user = _userManager.Users.SingleOrDefault(x => x.Email == loginDto.Email.ToLower());
-    //        ApplicationUser appUser = await _userManager.FindByEmailAsync(loginDto.Email);
-    //        if (appUser != null)
-    //        {
-    //            var result = await _signInManager.CheckPasswordSignInAsync(appUser, loginDto.Password, false);
-    //            if (!result.Succeeded) return Unauthorized();
-    //            return new UserDto
-    //            {
-    //                UserName = appUser.UserName,
-    //                Token = await _tokenService.CreateToken(appUser),
-    //                Email = appUser.Email
-    //            };
-    //        }
-    //        return Unauthorized("Invalid username");
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        _logger.LogError("Login failed, {@exception}", ex);
-    //        throw new Exception("Failed to login {@ex}", ex);
-    //    }
-    //}
 
     [HttpPost]
     [Route("login")]
